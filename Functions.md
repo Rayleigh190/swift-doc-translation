@@ -220,3 +220,52 @@ print(anotherGreeting(for: "Dave"))
 > __Note__\
 > 암묵적 반환 값으로 작성한 코드는 어떤 값을 반환해야 한다. 예를 들어, `print(13)`을 암묵적 반환 값으로 사용할 수 없다. 하지만 `fatalError("Oh no!")`와 같이 결코 반환하지 않는 함수를 암묵적 반환 값으로 사용할 수 있다. 이는 Swift가 암묵적 반환이 발생하지 않는다는 것을 알고 있기 때문이다.
 
+## [함수 Argument Labels과 Parameter 이름](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Function-Argument-Labels-and-Parameter-Names)
+
+각 함수의 파라미터에는 아규먼트 레이블과 파라미터 이름이 있다. 아규먼트 레이블은 함수를 호출할 때 사용된다. 아규먼트는 함수 호출 시 아규먼트 앞에 레이블을 붙여 작성하면 된다. 파라미터 이름은 함수 구현에 사용된다. 기본적으로 파라미터 이름을 아규먼트 레이블로 사용한다.
+
+```swift
+func someFunction(firstParameterName: Int, secondParameterName: Int) {
+    // In the function body, firstParameterName and secondParameterName
+    // refer to the argument values for the first and second parameters.
+}
+someFunction(firstParameterName: 1, secondParameterName: 2)
+```
+
+모든 파리미터는 고유한 이름을 가져야한다. 여러 파라미터가 동일한 아규먼트 레이블을 가질 수 있지만, 고유한 아규먼트 레이블은 코드의 가독성을 높이는 데 도움이 된다.
+
+### [아규먼트 레이블 지정](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Specifying-Argument-Labels)
+
+파라미터 이름 앞에 공백으로 구분하여 아규먼트 레이블을 작성한다:
+```swift
+func someFunction(argumentLabel parameterName: Int) {
+    // In the function body, parameterName refers to the argument value
+    // for that parameter.
+}
+```
+
+다음은 사람의 이름과 고향을 입력받아 인사말을 반환하는 greet(person:) 함수의 변형이다.
+
+```swift
+func greet(person: String, from hometown: String) -> String {
+    return "Hello \(person)!  Glad you could visit from \(hometown)."
+}
+print(greet(person: "Bill", from: "Cupertino"))
+// Prints "Hello Bill!  Glad you could visit from Cupertino."
+```
+
+아규먼트 레이블을 사용하면 함수를 표현력 있고 문장 같은 방식으로 호출할 수 있으며, 읽기 쉽고 의도가 명확한 함수 body를 제공할 수 있다.
+
+### [아규먼트 레이블 생략](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Omitting-Argument-Labels)
+
+파라미터에 대한 아규먼트 레이블이 필요하지 않으면 해당 파라미터에 대한 명시적 아규먼트 레이블 대신 밑줄(_)을 작성한다.
+
+```swift
+func someFunction(_ firstParameterName: Int, secondParameterName: Int) {
+    // In the function body, firstParameterName and secondParameterName
+    // refer to the argument values for the first and second parameters.
+}
+someFunction(1, secondParameterName: 2)
+```
+
+파라미터에 아규먼트 레이블이 있는 경우 함수를 호출할 때 아규먼트에 레이블을 지정해야 한다.
