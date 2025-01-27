@@ -269,3 +269,80 @@ someFunction(1, secondParameterName: 2)
 ```
 
 파라미터에 아규먼트 레이블이 있는 경우 함수를 호출할 때 아규먼트에 레이블을 지정해야 한다.
+
+### [기본 파라미터 값](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Default-Parameter-Values)
+
+함수의 모든 파라미터에 기본값을 정의하려면 파라미터의 타입 뒤에 값을 할당하면 된다. 기본값이 정의된 경우 함수를 호출할 때 해당 파라미터를 생략할 수 있다.
+
+```swift
+func someFunction(parameterWithoutDefault: Int, parameterWithDefault: Int = 12) {
+    // If you omit the second argument when calling this function, then
+    // the value of parameterWithDefault is 12 inside the function body.
+}
+someFunction(parameterWithoutDefault: 3, parameterWithDefault: 6) // parameterWithDefault is 6
+someFunction(parameterWithoutDefault: 4) // parameterWithDefault is 12
+```
+
+기본값이 없는 파라미터는 기본값이 있는 파라미터보다 함수 파라미터 목록의 앞 부분에 배치한다. 기본값이 없는 매개변수는 일반적으로 함수의 의미에 더 중요하다. 기본값을 정의해두면 기본 파라미터가 생략되었는지 여부와 관계없이 같은 함수가 호출된다는 것을 인식하기 더 쉽다.
+
+### [가변 파라미터](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Variadic-Parameters)
+
+가변 파라미터는 지정된 타입의 값을 0개 이상 허용한다. 가변 파라미터를 사용하면 함수가 호출될 때 파라미터에 여러개의 값이 전달될 수 있음을 지정할 수 있다. 파라미터의 타입 이름 뒤에 세 개의 마침표 문자(`...`)를 삽입하여 가변 파라미터를 작성한다.
+
+가변 파라미터에 전달된 값은 함수 내부에서 적합한 타입의 배열로 제공된다. 예를 들어, `numbers`라는 이름과 `Double...` 타입의 가변 파라미터는 `[Double]` 타입의 `numbers`라는 상수 배열로 함수 내에서 사용할 수 있다.
+
+아래 예에서는 임의의 길이의 숫자 리스트에 대한 산술평균을 계산한다:
+
+```swift
+func arithmeticMean(_ numbers: Double...) -> Double {
+    var total: Double = 0
+    for number in numbers {
+        total += number
+    }
+    return total / Double(numbers.count)
+}
+arithmeticMean(1, 2, 3, 4, 5)
+// returns 3.0, which is the arithmetic mean of these five numbers
+arithmeticMean(3, 8.25, 18.75)
+// returns 10.0, which is the arithmetic mean of these three numbers
+```
+
+함수는 여러 개의 가변 파라미터를 가질 수 있다. 가변 파라미터 뒤에 오는 첫 번째 파라미터는 아규먼트 레이블이 있어야 한다. 아규먼트 레이블은 어떤 아규먼트가 가변 파라미터에 전달되는지, 어떤 아규먼트가 가변 파라미터 뒤에 오는 파라미터에 전달되는지 명확하게 해준다.
+
+### [In-Out 파라미터](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#In-Out-Parameters)
+
+함수 파라미터는 기본적으로 상수이다. 함수 내에서 파라미터의 값을 변경하려고 하면 컴파일 타임 오류가 발생한다. 즉, 실수로 파라미터 값을 변경할 수 없다. 함수에서 파라미터의 값을 수정하고 함수가 종료된 이후에도 해당 변경 사항을 유지하려면 파라미터를 in-out 파라미터로 정의해야한다.
+
+`inout` 키워드를 파라미터 타입 바로 앞에 넣어서 in-out 파라미터를 작성한다. in-out 파라미터는 함수에 전달되는 값을 가지고 있으며, 함수에 의해 수정되고, 원래 값을 대체하기 위해 함수에서 다시 전달된다. in-out 파라미터의 동작과 컴파일 최적화 관련한 자세한 내용은 [In-Out Parameters](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/declarations#In-Out-Parameters)를 참조한다.
+
+in-out 파라미터의 아규먼트로만 변수를 전달할 수 있다. 상수나 리터럴은 수정 될 수 없기 때문에 아규먼트로 전달할 수 없다. in-out 파라미터에 아규먼트로 변수를 전달할 때 변수 이름 앞에 앰퍼샌드(`&`)를 붙여서 함수에서  변수가 수정될 수 있을음 나타낸다.
+
+> __Note__\
+> in-out 파라미터는 기본값을 가질 수 없고, 가변 파라미터는 `inout`으로 지정할 수 없다.
+
+다음은 `a`와 `b`라는 두 개의 in-out 정수 파라미터를 갖는 `swapTwoInts(_:_:)`라는 함수의 예이다:
+
+```swift
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
+    let temporaryA = a
+    a = b
+    b = temporaryA
+}
+```
+
+`swapTwoInts(_:_:)` 함수는 단순히 `b`의 값을 `a`로, `a`의 값을 `b`로 바꾼다. 이 함수는 `temporaryA`라는 임시 상수에 `a`의 값을 저장하고, `b`의 값을 a에 할당한 다음, `temporaryA`를 `b`에 할당하여 스왑을 수행한다.
+
+두 개의 Int 타입 변수를 사용하여 `swapTwoInts(_:_:)` 함수를 호출하여 값을 바꿀 수 있다. `someInt` 및 `anotherInt`의 이름이 `swapTwoInts(_:_:)` 함수에 전달될 때 앰퍼샌드가 접두사로 붙는다는 점을 유의하자.
+
+```swift
+var someInt = 3
+var anotherInt = 107
+swapTwoInts(&someInt, &anotherInt)
+print("someInt is now \(someInt), and anotherInt is now \(anotherInt)")
+// Prints "someInt is now 107, and anotherInt is now 3"
+```
+
+위의 예제는 `someInt`와 `anotherInt`의 원래 값이 함수 외부에 정의되었음에도 불구하고 `swapTwoInts(_:_:)` 함수에 의해 수정되는 것을 보여준다.
+
+> __Note__\
+> in-out 파라미터는 함수에서 값을 반환하는 것과 다르다. 위의 `swapTwoInts` 예제는 반환 타입을 정의하지 않고 값을 반환하지 않지만 여전히 `someInt`와 `anotherInt`의 값을 수정한다. in-out 파라미터는 함수가 함수 본문의 범위를 벗어나 효과를 갖도록 하는 또 다른 방법이다.
