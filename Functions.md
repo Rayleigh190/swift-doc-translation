@@ -346,3 +346,70 @@ print("someInt is now \(someInt), and anotherInt is now \(anotherInt)")
 
 > __Note__\
 > in-out 파라미터는 함수에서 값을 반환하는 것과 다르다. 위의 `swapTwoInts` 예제는 반환 타입을 정의하지 않고 값을 반환하지 않지만 여전히 `someInt`와 `anotherInt`의 값을 수정한다. in-out 파라미터는 함수가 함수 본문의 범위를 벗어나 효과를 갖도록 하는 또 다른 방법이다.
+
+## [함수 타입](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Function-Types)
+
+모든 함수에는 특정 함수 타입이 있는데, 함수 타입은 파라미터 타입과 반환 타입으로 구성된다.
+
+예를 들어:
+
+```swift
+func addTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a + b
+}
+func multiplyTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a * b
+}
+```
+
+위 예제에서는 `addTwoInts`와 `multiplyTwoInts`라는 두 개의 간단한 함수를 정의한다. 이 함수들은 두 개의 Int 값을 받아 적절한 수학 연산을 수행한 Int 결과 값을 반환한다.
+
+두 함수의 타입은 모두 `(Int, Int) -> Int`이다. 이는 다음과 같이 읽을 수 있다:
+
+"두 개의 `Int` 타입의 파라미터를 가지고 있으며 `Int` 타입 값을 반환하는 함수."
+
+파라미터나 반환 값이 없는 함수의 예는 다음과 같다.
+
+```swift
+func printHelloWorld() {
+    print("hello, world")
+}
+```
+
+위 함수의 타입은 `() -> Void`, 즉 "파라미터가 없고 `Void`를 반환하는 함수이다.
+
+### [함수 타입 사용](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Using-Function-Types)
+
+Swift에서는 다른 타입과 마찬가지로 함수 타이을 사용할 수 있다. 예를 들어, 상수나 변수를 함수 타입으로 정의하고 해당 변수에 적절한 함수를 할당할 수 있다:
+
+```swift
+var mathFunction: (Int, Int) -> Int = addTwoInts
+```
+
+이것은 다음과 같이 읽을 수 있다:
+
+"'두 개의 `Int` 값을 받아서 `Int` 값을 반환하는 함수' 타입을 갖는 `mathFunction`이라는 변수를 정의한다. 이 새로운 변수를 `addTwoInts`라는 함수를 참조하도록 설정한다."
+
+`addTwoInts(_:_:)` 함수는 `mathFunction` 변수와 동일한 타입을 가지고 있으므로 Swift 타입 검사기에서 이러한 할당이 허용된다.
+
+이제 `mathFunction`이라는 이름으로 할당된 함수를 호출할 수 있다:
+
+```swift
+print("Result: \(mathFunction(2, 3))")
+// Prints "Result: 5"
+```
+
+동일한 타입을 갖는 함수는 동일한 변수에 할당될 수 있다. 함수 타입이 아닌 것과 동일하다:
+
+```swift
+mathFunction = multiplyTwoInts
+print("Result: \(mathFunction(2, 3))")
+// Prints "Result: 6"
+```
+
+다른 타입과 마찬가지로 상수나 변수에 함수를 할당할 때 함수 타입을 추론하는 것은 Swift에 맡길 수 있다:
+
+```swift
+let anotherMathFunction = addTwoInts
+// anotherMathFunction is inferred to be of type (Int, Int) -> Int
+```
