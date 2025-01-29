@@ -413,3 +413,38 @@ print("Result: \(mathFunction(2, 3))")
 let anotherMathFunction = addTwoInts
 // anotherMathFunction is inferred to be of type (Int, Int) -> Int
 ```
+
+### [파라미터 타입으로서의 함수 타입](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Function-Types-as-Parameter-Types)
+
+`(Int, Int) -> Int`와 같은 함수 타입을 다른 함수의 파라미터 타입으로 사용할 수 있다. 이를 통해 함수를 호출할 때 함수 구현의 일부 측면을 함수 호출자가 제공할 수 있다.
+
+위의 수학 함수 결과를 인쇄하는 예는 다음과 같다:
+
+```swift
+func printMathResult(_ mathFunction: (Int, Int) -> Int, _ a: Int, _ b: Int) {
+    print("Result: \(mathFunction(a, b))")
+}
+printMathResult(addTwoInts, 3, 5)
+// Prints "Result: 8"
+```
+
+이 예제는 세 개의 파라미터를 갖는 `printMathResult(_:_:_:)`라는 함수를 정의한다. 첫 번째 파라미터는 `mathFunction`이라고 하며 `(Int, Int) -> Int` 타입이다. 첫 번째 파라미터의 아규먼트로 해당 타입의 모든 함수를 전달할 수 있다. 두 번째와 세 번째 매개변수는 `a`와 `b`라고 하며, 둘 다 `Int` 유형이다. 이는 제공된 수학 함수에 대한 두 개의 입력 값으로 사용된다.
+
+`printMathResult(_:_:_:)`가 호출되면 `addTwoInts` 함수와 정수 값 3과 5가 전달된다. 3과 5와 함께 제공된 함수를 호출하고 결과 8을 출력한다.
+
+`printMathResult(_:_:_:)`의 역할은 적절한 타입의 수학 함수 호출 결과를 출력하는 것이다. 해당 함수의 구현이 실제로 무엇을 하는지는 중요하지 않다. 중요한 것은 함수가 올바른 타입인지 여부이다. 이를 통해 `printMathResult(_:_:_:)`는 type-safe 방식으로 함수 호출자에게 일부 기능을 넘겨줄 수 있다.
+
+### [반환 타입으로서의 함수 타입](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/#Function-Types-as-Return-Types)
+
+함수의 반환 타입을 다른 함수의 반환 타입을 사용할 수 있다. 반환하는 함수의 반환 화살표(`->`) 뒤에 완전한 함수 타입을 작성하면 된다.
+
+다음 예제에서는 `stepForward(_:)`와 `stepBackward(_:)`라는 두 개의 간단한 함수를 정의한다. `stepForward(_:)` 함수는 입력 값보다 하나 큰 값을 반환하고, `stepBackward(_:)` 함수는 입력 값보다 하나 작은 값을 반환한다. 두 함수 모두 `(Int) -> Int` 타입이다.
+
+```swift
+func stepForward(_ input: Int) -> Int {
+    return input + 1
+}
+func stepBackward(_ input: Int) -> Int {
+    return input - 1
+}
+```
